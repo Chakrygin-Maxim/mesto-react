@@ -26,23 +26,45 @@ function App() {
     setAddPlacePopupOpen(true);
   }
 
-  function closeAllPopups(){
+  // закрывает все popup
+  function closeAllPopups() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
   }
 
-
   return (
     <body className="page">
       <Header />
-      <Profile onEditAvatarClick={handleEditAvatarClick} onEditProfileClick={handleEditProfileClick} onAddPlaceClick={handleAddPlaceClick}/>
+      <Profile
+        onEditAvatarClick={handleEditAvatarClick}
+        onEditProfileClick={handleEditProfileClick}
+        onAddPlaceClick={handleAddPlaceClick}
+      />
       <Main />
       <Footer />
 
-      <EditProfilePopup name="profile" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} title="Редактировать профиль" buttonText="Сохранить" />
-      <AddPlacePopup name="mesto" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} title="Новое место" buttonText="Создать" />
-      <EditAvatarPopup name="avatar" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} title="Обновить аватар" buttonText="Сохранить" />
+      <EditProfilePopup
+        name="profile"
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        title="Редактировать профиль"
+        buttonText="Сохранить"
+      />
+      <AddPlacePopup
+        name="mesto"
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        title="Новое место"
+        buttonText="Создать"
+      />
+      <EditAvatarPopup
+        name="avatar"
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        title="Обновить аватар"
+        buttonText="Сохранить"
+      />
 
       <template id="element-template">
         <article className="element">
