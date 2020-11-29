@@ -1,0 +1,20 @@
+.popup__form {
+  background: #ffffff;
+  border-radius: 10px;
+  max-width: 430px;
+  width: 100%;
+  position: fixed;
+  box-sizing: border-box;
+  padding: 34px 36px 36px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 500px) {
+  .popup__form {
+    max-width: calc(100% - 2 * 40px);
+    padding: 14px 16px 16px;
+  }
+}

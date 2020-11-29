@@ -1,0 +1,12 @@
+.popup__button_disabled {
+  color: #b8b8b8;
+  background: rgb(246, 246, 246);
+  pointer-events: none;
+  user-select: none;
+  border: 1px solid #0000002d;
+  border-radius: 2px;
+}
+
+.popup__button_disabled:hover {
+  opacity: 1;
+}
