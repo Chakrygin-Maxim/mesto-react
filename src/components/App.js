@@ -36,12 +36,11 @@ function App() {
   return (
     <body className="page">
       <Header />
-      <Profile
+      <Main
         onEditAvatarClick={handleEditAvatarClick}
         onEditProfileClick={handleEditProfileClick}
         onAddPlaceClick={handleAddPlaceClick}
       />
-      <Main />
       <Footer />
 
       <EditProfilePopup
@@ -65,20 +64,6 @@ function App() {
         title="Обновить аватар"
         buttonText="Сохранить"
       />
-
-      <template id="element-template">
-        <article className="element">
-          <img className="element__photo" />
-          <button className="element__button-trash"></button>
-          <div className="element__info">
-            <h2 className="element__info-name"></h2>
-            <div className="element__like-container">
-              <button className="element__button-like" type="button"></button>
-              <p className="element__likes"></p>
-            </div>
-          </div>
-        </article>
-      </template>
     </body>
   );
 }
