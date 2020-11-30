@@ -2,9 +2,8 @@ import { useState } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./EditProfilePopup";
-import AddPlacePopup from "./PopupWithForm";
+import AddPlacePopup from "./AddPlacePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import ImagePopup from "./ImagePopup";
 
