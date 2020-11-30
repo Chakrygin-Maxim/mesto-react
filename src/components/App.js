@@ -1,17 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Header from "./Header";
-import Profile from "./Profile";
 import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./PopupWithForm";
 import AddPlacePopup from "./PopupWithForm";
 import EditAvatarPopup from "./PopupWithForm";
+import ImagePopup from "./ImagePopup";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState("");
 
   // открытие popup Аватара
   function handleEditAvatarClick() {
@@ -26,11 +27,17 @@ function App() {
     setAddPlacePopupOpen(true);
   }
 
+  // открытие popup с местом
+  function handleCardClick(card) {
+    setSelectedCard(card);
+  }
+
   // закрывает все popup
   function closeAllPopups() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
+    setSelectedCard("");
   }
 
   return (
@@ -40,9 +47,9 @@ function App() {
         onEditAvatarClick={handleEditAvatarClick}
         onEditProfileClick={handleEditProfileClick}
         onAddPlaceClick={handleAddPlaceClick}
+        onCardClick={handleCardClick}
       />
       <Footer />
-
       <EditProfilePopup
         name="profile"
         isOpen={isEditProfilePopupOpen}
@@ -64,6 +71,7 @@ function App() {
         title="Обновить аватар"
         buttonText="Сохранить"
       />
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
     </body>
   );
 }

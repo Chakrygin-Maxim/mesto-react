@@ -11,22 +11,22 @@ function Main(props) {
   const [cards, setCards] = useState([]);
   let userId = "";
 
-  function _setUserData(userData) {
+  function setUserData(userData) {
     setUserName(userData.name);
     setUserDescription(userData.about);
     setUserAvatar(userData.avatar);
     userId = userData._id;
   }
 
-  function _setInitialCards(inititialCards) {
+  function setInitialCards(inititialCards) {
     setCards(inititialCards);
   }
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()]).then(
       ([userData, initialCards]) => {
-        _setUserData(userData);
-        _setInitialCards(initialCards);
+        setUserData(userData);
+        setInitialCards(initialCards);
       }
     );
   }, []);
@@ -64,12 +64,7 @@ function Main(props) {
       {/* Рендер карточек */}
       <main className="elements">
         {cards.map((item, key) => (
-          <Card
-            key={key}
-            name={item.name}
-            link={item.link}
-            likes={item.likes}
-          ></Card>
+          <Card key={key} card={item} onCardClick={props.onCardClick}></Card>
         ))}
       </main>
     </>
