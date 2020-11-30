@@ -16,8 +16,8 @@ function AddPlacePopup(props) {
             className="popup__input popup__input_field_cardName"
             id="cardName-input"
             placeholder="Название"
-            minlength="2"
-            maxlength="30"
+            minLength="2"
+            maxLength="30"
             required
           />
           <span className="popup__input-error" id="cardName-input-error"></span>

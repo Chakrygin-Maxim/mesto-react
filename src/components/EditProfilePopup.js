@@ -13,25 +13,25 @@ function EditPofilePopup(props) {
           <input
             name="name"
             type="text"
-            class="popup__input popup__input_field_name"
+            className="popup__input popup__input_field_name"
             id="name-input"
             placeholder="Имя"
-            minlength="2"
-            maxlength="40"
+            minLength="2"
+            maxLength="40"
             required
           />
-          <span class="popup__input-error" id="name-input-error"></span>
+          <span className="popup__input-error" id="name-input-error"></span>
           <input
             name="job"
             type="text"
-            class="popup__input popup__input_field_job"
+            className="popup__input popup__input_field_job"
             id="job-input"
             placeholder="О себе"
-            minlength="2"
-            maxlength="200"
+            minLength="2"
+            maxLength="200"
             required
           />
-          <span class="popup__input-error" id="job-input-error"></span>
+          <span className="popup__input-error" id="job-input-error"></span>
         </>
       }
     ></PopupWithForm>
