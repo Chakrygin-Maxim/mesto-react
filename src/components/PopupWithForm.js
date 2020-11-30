@@ -12,7 +12,7 @@ function PopupWithForm(props) {
         noValidate
       >
         <h2 className="popup__title">{props.title}</h2>
-
+        {props.children}
         <button type="submit" className="popup__button">
           {props.buttonText}
         </button>

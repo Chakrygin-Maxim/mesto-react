@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./PopupWithForm";
 import AddPlacePopup from "./PopupWithForm";
-import EditAvatarPopup from "./PopupWithForm";
+import EditAvatarPopup from "./EditAvatarPopup";
 import ImagePopup from "./ImagePopup";
 
 function App() {
