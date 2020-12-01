@@ -9,13 +9,11 @@ function Main(props) {
   );
   const [userAvatar, setUserAvatar] = useState("");
   const [cards, setCards] = useState([]);
-  let userId = "";
 
   function setUserData(userData) {
     setUserName(userData.name);
     setUserDescription(userData.about);
     setUserAvatar(userData.avatar);
-    userId = userData._id;
   }
 
   function setInitialCards(inititialCards) {
@@ -63,8 +61,12 @@ function Main(props) {
 
       {/* Рендер карточек */}
       <main className="elements">
-        {cards.map((item, key) => (
-          <Card key={key} card={item} onCardClick={props.onCardClick}></Card>
+        {cards.map((item) => (
+          <Card
+            key={item._id}
+            card={item}
+            onCardClick={props.onCardClick}
+          ></Card>
         ))}
       </main>
     </>
