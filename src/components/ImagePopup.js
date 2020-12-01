@@ -1,7 +1,7 @@
 function ImagePopup(props) {
   return (
     <section
-      className={`popup popup_form_photo ${props.card && "popup_opened"}`}
+      className={`popup popup_form_photo ${props.card.link && "popup_opened"}`}
     >
       <figure className="popup__image-container">
         <img

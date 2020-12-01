@@ -11,7 +11,7 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState("");
+  const [selectedCard, setSelectedCard] = useState({ link: "", name: "" });
 
   // открытие popup Аватара
   function handleEditAvatarClick() {
@@ -28,7 +28,8 @@ function App() {
 
   // открытие popup с местом
   function handleCardClick(card) {
-    setSelectedCard(card);
+    const { link, name } = card;
+    setSelectedCard({ link, name });
   }
 
   // закрывает все popup
@@ -36,7 +37,7 @@ function App() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
-    setSelectedCard("");
+    setSelectedCard({ link: "", name: "" });
   }
 
   return (
