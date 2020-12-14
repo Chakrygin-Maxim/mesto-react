@@ -22,6 +22,11 @@ function App() {
     avatar: "",
   });
 
+  function setUserInfo(data) {
+    const { _id, name, about, avatar } = data;
+    setCurrentUser({ _id, name, about, avatar });
+  }
+
   // открытие popup Аватара
   function handleEditAvatarClick() {
     setEditAvatarPopupOpen(true);
@@ -41,6 +46,13 @@ function App() {
     setSelectedCard({ link, name });
   }
 
+  function handleUpdateUser(data) {
+    api.updateUserInfo(data.name, data.about).then((userData) => {
+      setUserInfo(userData);
+      closeAllPopups();
+    });
+  }
+
   // закрывает все popup
   function closeAllPopups() {
     setEditAvatarPopupOpen(false);
@@ -50,9 +62,8 @@ function App() {
   }
 
   useEffect(() => {
-    api.getUserInfo().then((data) => {
-      const { _id, name, about, avatar } = data;
-      setCurrentUser({ _id, name, about, avatar });
+    api.getUserInfo().then((userData) => {
+      setUserInfo(userData);
     });
   }, []);
 
@@ -68,11 +79,9 @@ function App() {
         />
         <Footer />
         <EditProfilePopup
-          name="profile"
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-          title="Редактировать профиль"
-          buttonText="Сохранить"
+          onUpdateUser={handleUpdateUser}
         />
         <AddPlacePopup
           name="mesto"
