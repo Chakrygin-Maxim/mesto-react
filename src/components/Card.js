@@ -1,7 +1,15 @@
+import { useContext } from "react";
+import { CurrentUserContext } from "../context/CurrentUserContext";
+
 function Card(props) {
+  const currentUser = useContext(CurrentUserContext);
+
   function handleCardClick() {
     props.onCardClick(props.card);
   }
+
+  const isOwn = props.card.owner._id === currentUser._id;
+  const isLiked = props.card.likes.some((i) => i._id === currentUser._id);
 
   return (
     <article className="element">
@@ -11,11 +19,18 @@ function Card(props) {
         alt={props.card.name}
         onClick={handleCardClick}
       />
-      <button className="element__button-trash"></button>
+      <button
+        className={`element__button-trash ${isOwn && "button-trash_visible"}`}
+      ></button>
       <div className="element__info">
         <h2 className="element__info-name">{props.card.name}</h2>
         <div className="element__like-container">
-          <button className="element__button-like" type="button"></button>
+          <button
+            className={`element__button-like ${
+              isLiked && "element__button-like_status_liked"
+            }`}
+            type="button"
+          ></button>
           <p className="element__likes">{props.card.likes.length}</p>
         </div>
       </div>
