@@ -47,7 +47,14 @@ function App() {
   }
 
   function handleUpdateUser(data) {
-    api.updateUserInfo(data.name, data.about).then((userData) => {
+    return api.updateUserInfo(data.name, data.about).then((userData) => {
+      setUserInfo(userData);
+      closeAllPopups();
+    });
+  }
+
+  function handleUpdateAvatar(Avatar) {
+    return api.updateAvatar(Avatar).then((userData) => {
       setUserInfo(userData);
       closeAllPopups();
     });
@@ -91,11 +98,9 @@ function App() {
           buttonText="Создать"
         />
         <EditAvatarPopup
-          name="avatar"
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-          title="Обновить аватар"
-          buttonText="Сохранить"
+          onUpdateAvatar={handleUpdateAvatar}
         />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>
