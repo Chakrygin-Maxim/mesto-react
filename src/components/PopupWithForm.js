@@ -1,4 +1,20 @@
+import { useEffect } from "react";
+
 function PopupWithForm(props) {
+  function handleClose(event) {
+    if (event.key === "Escape") {
+      props.onClose();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleClose);
+
+    return () => {
+      document.removeEventListener("keydown", handleClose);
+    };
+  }, []);
+
   return (
     <section
       className={`popup popup_form_${props.name} ${
@@ -9,6 +25,7 @@ function PopupWithForm(props) {
         className="popup__form"
         action={`popup-${props.name}-submit`}
         name={props.name}
+        onSubmit={props.onSubmit}
         noValidate
       >
         <h2 className="popup__title">{props.title}</h2>

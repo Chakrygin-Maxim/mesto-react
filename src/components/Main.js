@@ -1,33 +1,9 @@
-import { useState, useEffect } from "react";
-import api from "../utils/api.js";
+import { useContext } from "react";
 import Card from "./Card.js";
+import { CurrentUserContext } from "../context/CurrentUserContext";
 
 function Main(props) {
-  const [userName, setUserName] = useState("Жак-Ив Кусто");
-  const [userDescription, setUserDescription] = useState(
-    "Исследователь океана"
-  );
-  const [userAvatar, setUserAvatar] = useState("");
-  const [cards, setCards] = useState([]);
-
-  function setUserData(userData) {
-    setUserName(userData.name);
-    setUserDescription(userData.about);
-    setUserAvatar(userData.avatar);
-  }
-
-  function setInitialCards(inititialCards) {
-    setCards(inititialCards);
-  }
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()]).then(
-      ([userData, initialCards]) => {
-        setUserData(userData);
-        setInitialCards(initialCards);
-      }
-    );
-  }, []);
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <>
@@ -38,18 +14,22 @@ function Main(props) {
             className="profile__image-container"
             onClick={props.onEditAvatarClick}
           >
-            <img src={userAvatar} alt="Аватар" className="profile__image" />
+            <img
+              src={currentUser.avatar}
+              alt="Аватар"
+              className="profile__image"
+            />
           </div>
           <div className="profile__info">
             <div className="profile__name-container">
-              <h1 className="profile__name">{userName}</h1>
+              <h1 className="profile__name">{currentUser.name}</h1>
               <button
                 className="profile__button-edit"
                 type="button"
                 onClick={props.onEditProfileClick}
               ></button>
             </div>
-            <p className="profile__job">{userDescription}</p>
+            <p className="profile__job">{currentUser.about}</p>
           </div>
         </div>
         <button
@@ -61,11 +41,13 @@ function Main(props) {
 
       {/* Рендер карточек */}
       <main className="elements">
-        {cards.map((item) => (
+        {props.cards.map((item) => (
           <Card
             key={item._id}
             card={item}
             onCardClick={props.onCardClick}
+            onCardLike={props.onCardLike}
+            onCardDelete={props.onCardDelete}
           ></Card>
         ))}
       </main>

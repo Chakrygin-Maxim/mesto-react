@@ -1,13 +1,29 @@
+import { useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup(props) {
+  const cardNameRef = useRef();
+  const linkRef = useRef();
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const inputValues = {
+      [cardNameRef.current.name]: cardNameRef.current.value,
+      [linkRef.current.name]: linkRef.current.value,
+    };
+
+    props.onAddPlace(inputValues);
+  }
+
   return (
     <PopupWithForm
       name="mesto"
       isOpen={props.isOpen}
       onClose={props.onClose}
-      title={props.title}
-      buttonText={props.buttonText}
+      title="Новое место"
+      buttonText="Создать"
+      onSubmit={handleSubmit}
     >
       <input
         name="cardName"
@@ -17,6 +33,7 @@ function AddPlacePopup(props) {
         placeholder="Название"
         minLength="2"
         maxLength="30"
+        ref={cardNameRef}
         required
       />
       <span className="popup__input-error" id="cardName-input-error"></span>
@@ -26,6 +43,7 @@ function AddPlacePopup(props) {
         className="popup__input popup__input_field_link"
         id="link-input"
         placeholder="Ссылка на картинку"
+        ref={linkRef}
         required
       />
       <span className="popup__input-error" id="link-input-error"></span>

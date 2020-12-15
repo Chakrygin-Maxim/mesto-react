@@ -64,26 +64,6 @@ class Api {
     }).then(this._handleResponse);
   }
 
-  setLike(cardId) {
-    return fetch(`${this._url}${this._cohort}/cards/likes/${cardId}`, {
-      method: "PUT",
-      headers: {
-        authorization: this._token,
-        "content-type": "application/json",
-      },
-    }).then(this._handleResponse);
-  }
-
-  removeLike(cardId) {
-    return fetch(`${this._url}${this._cohort}/cards/likes/${cardId}`, {
-      method: "DELETE",
-      headers: {
-        authorization: this._token,
-        "content-type": "application/json",
-      },
-    }).then(this._handleResponse);
-  }
-
   updateAvatar(avatar) {
     return fetch(`${this._url}${this._cohort}/users/me/avatar`, {
       method: "PATCH",
@@ -92,6 +72,16 @@ class Api {
         "content-type": "application/json",
       },
       body: JSON.stringify({ avatar }),
+    }).then(this._handleResponse);
+  }
+
+  changeLikeCardStatus(cardId, isLiked) {
+    return fetch(`${this._url}${this._cohort}/cards/likes/${cardId}`, {
+      method: isLiked ? "PUT" : "DELETE",
+      headers: {
+        authorization: this._token,
+        "content-type": "application/json",
+      },
     }).then(this._handleResponse);
   }
 }
