@@ -23,6 +23,17 @@ function App() {
     avatar: "",
   });
 
+  // установка данных пользователя и начальные карточки при монтировании
+  useEffect(() => {
+    Promise.all([api.getUserInfo(), api.getInitialCards()]).then(
+      ([userData, initialCards]) => {
+        setUserInfo(userData);
+        setCards(initialCards);
+      }
+    );
+  }, []);
+
+  // установка данных пользователя
   function setUserInfo(data) {
     const { _id, name, about, avatar } = data;
     setCurrentUser({ _id, name, about, avatar });
@@ -47,6 +58,7 @@ function App() {
     setSelectedCard({ link, name });
   }
 
+  // обновление данных пользователя
   function handleUpdateUser(data) {
     return api.updateUserInfo(data.name, data.about).then((userData) => {
       setUserInfo(userData);
@@ -54,6 +66,7 @@ function App() {
     });
   }
 
+  // обновление аватара пользователя
   function handleUpdateAvatar(Avatar) {
     return api.updateAvatar(Avatar).then((userData) => {
       setUserInfo(userData);
@@ -61,6 +74,7 @@ function App() {
     });
   }
 
+  // добавление новой карточки
   function handleAddPlaceSubmit(inputValues) {
     return api.addCard(inputValues.cardName, inputValues.link).then((data) => {
       const newCards = cards.slice();
@@ -70,6 +84,7 @@ function App() {
     });
   }
 
+  // установка-снятие лайка картинки
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
@@ -79,6 +94,7 @@ function App() {
     });
   }
 
+  // удаление карточки
   function handleCardDelete(cardId) {
     return api.deleteCard(cardId).then((data) => {
       const currentCards = cards.filter((item) => {
@@ -89,12 +105,6 @@ function App() {
     });
   }
 
-  useEffect(() => {
-    api.getInitialCards().then((initialCards) => {
-      setCards(initialCards);
-    });
-  }, []);
-
   // закрывает все popup
   function closeAllPopups() {
     setEditAvatarPopupOpen(false);
@@ -102,12 +112,6 @@ function App() {
     setAddPlacePopupOpen(false);
     setSelectedCard({ link: "", name: "" });
   }
-
-  useEffect(() => {
-    api.getUserInfo().then((userData) => {
-      setUserInfo(userData);
-    });
-  }, []);
 
   return (
     <body className="page">
