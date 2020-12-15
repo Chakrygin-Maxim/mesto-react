@@ -15,6 +15,7 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({ link: "", name: "" });
+  const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({
     _id: "",
     name: "",
@@ -60,6 +61,40 @@ function App() {
     });
   }
 
+  function handleAddPlaceSubmit(inputValues) {
+    return api.addCard(inputValues.cardName, inputValues.link).then((data) => {
+      const newCards = cards.slice();
+      newCards.unshift(data);
+      setCards(newCards);
+      closeAllPopups();
+    });
+  }
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+
+    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+      const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+      setCards(newCards);
+    });
+  }
+
+  function handleCardDelete(cardId) {
+    return api.deleteCard(cardId).then((data) => {
+      const currentCards = cards.filter((item) => {
+        return item._id !== cardId;
+      });
+      setCards(currentCards);
+      return data;
+    });
+  }
+
+  useEffect(() => {
+    api.getInitialCards().then((initialCards) => {
+      setCards(initialCards);
+    });
+  }, []);
+
   // закрывает все popup
   function closeAllPopups() {
     setEditAvatarPopupOpen(false);
@@ -79,6 +114,9 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
         <Main
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
           onEditAvatarClick={handleEditAvatarClick}
           onEditProfileClick={handleEditProfileClick}
           onAddPlaceClick={handleAddPlaceClick}
@@ -91,11 +129,9 @@ function App() {
           onUpdateUser={handleUpdateUser}
         />
         <AddPlacePopup
-          name="mesto"
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-          title="Новое место"
-          buttonText="Создать"
+          onAddPlace={handleAddPlaceSubmit}
         />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
