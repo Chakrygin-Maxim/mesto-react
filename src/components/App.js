@@ -13,7 +13,7 @@ import ImagePopup from "./ImagePopup";
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({ link: "", name: "" });
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({
@@ -25,12 +25,14 @@ function App() {
 
   // установка данных пользователя и начальные карточки при монтировании
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()]).then(
-      ([userData, initialCards]) => {
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, initialCards]) => {
         setUserInfo(userData);
         setCards(initialCards);
-      }
-    );
+      })
+      .catch((err) => {
+        console.log(`Error ${err}`);
+      });
   }, []);
 
   // установка данных пользователя
@@ -41,7 +43,7 @@ function App() {
 
   // открытие popup Аватара
   function handleEditAvatarClick() {
-    setEditAvatarPopupOpen(true);
+    setIsEditAvatarPopupOpen(true);
   }
   // открытие popup Профиля пользователя
   function handleEditProfileClick() {
@@ -60,61 +62,86 @@ function App() {
 
   // обновление данных пользователя
   function handleUpdateUser(data) {
-    return api.updateUserInfo(data.name, data.about).then((userData) => {
-      setUserInfo(userData);
-      closeAllPopups();
-    });
+    return api
+      .updateUserInfo(data.name, data.about)
+      .then((userData) => {
+        setUserInfo(userData);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Error ${err}`);
+      });
   }
 
   // обновление аватара пользователя
-  function handleUpdateAvatar(Avatar) {
-    return api.updateAvatar(Avatar).then((userData) => {
-      setUserInfo(userData);
-      closeAllPopups();
-    });
+  function handleUpdateAvatar(avatar) {
+    return api
+      .updateAvatar(avatar)
+      .then((userData) => {
+        setUserInfo(userData);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Error ${err}`);
+      });
   }
 
   // добавление новой карточки
   function handleAddPlaceSubmit(inputValues) {
-    return api.addCard(inputValues.cardName, inputValues.link).then((data) => {
-      const newCards = cards.slice();
-      newCards.unshift(data);
-      setCards(newCards);
-      closeAllPopups();
-    });
+    return api
+      .addCard(inputValues.cardName, inputValues.link)
+      .then((data) => {
+        const newCards = cards.slice();
+        newCards.unshift(data);
+        setCards(newCards);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Error ${err}`);
+      });
   }
 
   // установка-снятие лайка картинки
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-      setCards(newCards);
-    });
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        setCards(newCards);
+      })
+      .catch((err) => {
+        console.log(`Error ${err}`);
+      });
   }
 
   // удаление карточки
   function handleCardDelete(cardId) {
-    return api.deleteCard(cardId).then((data) => {
-      const currentCards = cards.filter((item) => {
-        return item._id !== cardId;
+    return api
+      .deleteCard(cardId)
+      .then((data) => {
+        const currentCards = cards.filter((item) => {
+          return item._id !== cardId;
+        });
+        setCards(currentCards);
+        return data;
+      })
+      .catch((err) => {
+        console.log(`Error ${err}`);
       });
-      setCards(currentCards);
-      return data;
-    });
   }
 
   // закрывает все popup
   function closeAllPopups() {
-    setEditAvatarPopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setSelectedCard({ link: "", name: "" });
   }
 
   return (
-    <body className="page">
+    <>
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
         <Main
@@ -144,7 +171,7 @@ function App() {
         />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>
-    </body>
+    </>
   );
 }
 
