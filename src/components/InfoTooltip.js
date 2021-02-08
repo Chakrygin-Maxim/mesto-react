@@ -1,13 +1,11 @@
-import React from "react";
-
 function InfoTooltip(props) {
   return (
-    <div className={props.isOpen && "popup_opened"}>
+    <div className={`popup ${props.isOpen && "popup_opened"}`}>
       <div className="popup__form">
         <img
           className="popup__tooltip-logo"
           src={props.tooltipLogo}
-          alt={props.tooltipLogoAlt}
+          alt={props.tooltipLogo}
         />
         <p className="popup__tooltip-text">{props.tooltipText}</p>
         <button

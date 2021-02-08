@@ -13,11 +13,13 @@ import ImagePopup from "./ImagePopup";
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
+import SuccessTooltip from "./SuccessTooltip";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isSuccessTooltipOpen, setIsSuccessTooltipOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({ link: "", name: "" });
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({
@@ -138,13 +140,12 @@ function App() {
   }
 
   function handleLoginSubmit(evt) {
-    evt.preventdefault();
-    console.log("Нажали сабмит сайнин");
+    evt.preventDefault();
   }
 
   function handleLogoutSubmit(evt) {
-    evt.preventdefault();
-    console.log("Нажали сабмит сайнин");
+    evt.preventDefault();
+    setIsSuccessTooltipOpen(true);
   }
 
   // закрывает все popup
@@ -152,6 +153,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
+    setIsSuccessTooltipOpen(false);
     setSelectedCard({ link: "", name: "" });
   }
 
@@ -202,6 +204,10 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
         />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        <SuccessTooltip
+          isOpen={isSuccessTooltipOpen}
+          onClose={closeAllPopups}
+        />
       </CurrentUserContext.Provider>
     </>
   );
