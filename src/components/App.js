@@ -172,6 +172,7 @@ function App() {
       });
   }
 
+  // логин сотрудника на сайте
   function handleLoginSubmit(mail, password) {
     auth.authorize(mail, password).then((data) => {
       if (data.token) {
@@ -184,6 +185,7 @@ function App() {
     });
   }
 
+  // регистрация пользователя на сайте
   function handleRegisterSubmit(mail, password) {
     auth
       .register(mail, password)
@@ -212,6 +214,7 @@ function App() {
     setSelectedCard({ link: "", name: "" });
   }
 
+  // логаут с сайта
   function handleLogout() {
     setLoggedIn(false);
     setUserMail("");
