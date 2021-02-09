@@ -212,10 +212,21 @@ function App() {
     setSelectedCard({ link: "", name: "" });
   }
 
+  function handleLogout() {
+    setLoggedIn(false);
+    setUserMail("");
+    localStorage.removeItem("jwt");
+    history.push("/sign-in");
+  }
+
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
-        <Header loggedIn={loggedIn} />
+        <Header
+          loggedIn={loggedIn}
+          userMail={userMail}
+          onLogoutClick={handleLogout}
+        />
         <Switch>
           <ProtectedRoute
             exact

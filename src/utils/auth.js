@@ -83,8 +83,5 @@ export const checkToken = (token) => {
         return { err };
       }
     })
-    .then((data) => data)
-    .catch((err) => {
-      err;
-    });
+    .then((data) => data);
 };

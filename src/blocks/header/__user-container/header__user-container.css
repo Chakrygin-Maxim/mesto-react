@@ -1,0 +1,9 @@
+.header__user-container {
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  .header__user-container {
+    margin: 28px 27px 0 0;
+  }
+}

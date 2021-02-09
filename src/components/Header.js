@@ -7,14 +7,6 @@ function Header(props) {
   const linkText = `${pathname === "/sign-in" ? "Регистрация" : "Войти"}`;
   const pathTo = `${pathname === "/sign-in" ? "/sign-up" : "/sign-in"}`;
 
-  function hendleSignup(evt) {
-    evt.preventdefault();
-  }
-
-  function handleSignin(evt) {
-    evt.preventdefault();
-  }
-
   return (
     <header className="header">
       <a
@@ -23,10 +15,21 @@ function Header(props) {
       >
         <img src={logo} alt="Основное лого Mesto" className="header__logo" />
       </a>
-      <Link className="header__link header__text" to={pathTo}>
-        {linkText}
-      </Link>
-      {/* <p onClick={props.onClick}>{linkText}</p> */}
+      {props.loggedIn ? (
+        <div className="header__user-container">
+          <p className="header__text">{props.userMail}</p>
+          <button
+            className="header__text header__button"
+            onClick={props.onLogoutClick}
+          >
+            Выйти
+          </button>
+        </div>
+      ) : (
+        <Link className="header__link header__text" to={pathTo}>
+          {linkText}
+        </Link>
+      )}
     </header>
   );
 }
