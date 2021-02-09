@@ -13,9 +13,14 @@ function Register(props) {
     setPassword(evt.target.value);
   }
 
+  function handleRegisterSubmit(evt) {
+    evt.preventDefault();
+    props.onSubmitButton(email, password);
+  }
+
   return (
     <Authentication
-      onSubmitButton={props.onSubmitButton}
+      onSubmitButton={handleRegisterSubmit}
       title={"Регистрация"}
       onEmailInput={handleEmailInput}
       onPasswordInput={handlePasswordInput}

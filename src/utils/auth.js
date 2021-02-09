@@ -4,29 +4,35 @@ export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: {
-      Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
-      if (res.status === 200) {
-        return res.json();
-      } else if (res.status === 401) {
-        throw new Error("некорректно заполнено одно из полей");
+      try {
+        if (res.status === 201) {
+          return res.json();
+        } else if (res.status === 400) {
+          throw new Error(res.error);
+        } else if (res.status === 401) {
+          throw new Error("некорректно заполнено одно из полей");
+        }
+      } catch (err) {
+        return { err };
       }
     })
     .then((res) => {
       return res;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      return { error: err.message };
+    });
 };
 
 export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
-      Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
@@ -45,8 +51,8 @@ export const authorize = (email, password) => {
       }
     })
     .then((data) => {
-      if (data.user) {
-        localStorage.setItem("jwt", data.jwt);
+      if (data.token) {
+        localStorage.setItem("jwt", data.token);
       }
       return data;
     })
@@ -74,9 +80,11 @@ export const checkToken = (token) => {
           throw new Error("Переданный токен некорректен");
         }
       } catch (err) {
-        return err;
+        return { err };
       }
     })
     .then((data) => data)
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      err;
+    });
 };

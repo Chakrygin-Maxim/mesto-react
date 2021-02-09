@@ -48,6 +48,33 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    handleCheckToken();
+  }, [history]);
+
+  function handleCheckToken() {
+    const jwt = localStorage.getItem("jwt");
+
+    if (jwt) {
+      auth
+        .checkToken(jwt)
+        .then((res) => {
+          if (res) {
+            setUserMail(res.data.email);
+            setLoggedIn(true);
+            history.push("/");
+          } else {
+            localStorage.removeItem("jwt");
+          }
+        })
+
+        .catch((error) => {
+          setIsErrorTooltipOpen(true);
+          console.log("Ошибка. Запрос не выполнен:", error);
+        });
+    }
+  }
+
   // установка данных пользователя
   function setUserInfo(data) {
     const { _id, name, about, avatar } = data;
@@ -157,9 +184,22 @@ function App() {
     });
   }
 
-  function handleLogoutSubmit(evt) {
-    evt.preventDefault();
-    setIsSuccessTooltipOpen(true);
+  function handleRegisterSubmit(mail, password) {
+    auth
+      .register(mail, password)
+      .then((res) => {
+        if (res.data) {
+          history.push("/sign-in");
+          setIsSuccessTooltipOpen(true);
+        } else {
+          setIsErrorTooltipOpen(true);
+        }
+      })
+
+      .catch((error) => {
+        setIsErrorTooltipOpen(true);
+        console.log("Ошибка. Запрос не выполнен:", error);
+      });
   }
 
   // закрывает все popup
@@ -193,7 +233,7 @@ function App() {
           <ProtectedRoute exact path="/" component={Footer} />
 
           <Route path="/sign-up">
-            <Register onSubmitButton={handleLogoutSubmit} />
+            <Register onSubmitButton={handleRegisterSubmit} />
           </Route>
 
           <Route path="/sign-in">
