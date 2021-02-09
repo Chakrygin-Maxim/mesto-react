@@ -2,21 +2,11 @@
   margin: 0 auto;
   min-height: 119px;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
   max-width: 882px;
-}
-
-.header::after {
-  content: '';
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
   border-bottom: 1px solid #545454;
-  opacity: 0.7;
 }
 
 @media screen and (max-width: 768px) {
