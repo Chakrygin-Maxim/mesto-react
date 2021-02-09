@@ -14,12 +14,15 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
 import SuccessTooltip from "./SuccessTooltip";
+import ErrorTooltip from "./ErrorTooltip";
+import * as auth from "../utils/auth";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isSuccessTooltipOpen, setIsSuccessTooltipOpen] = useState(false);
+  const [isErrorTooltipOpen, setIsErrorTooltipOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({ link: "", name: "" });
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({
@@ -29,6 +32,9 @@ function App() {
     avatar: "",
   });
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userMail, setUserMail] = useState("");
+
+  const history = useHistory();
 
   // установка данных пользователя и начальные карточки при монтировании
   useEffect(() => {
@@ -139,8 +145,16 @@ function App() {
       });
   }
 
-  function handleLoginSubmit(evt) {
-    evt.preventDefault();
+  function handleLoginSubmit(mail, password) {
+    auth.authorize(mail, password).then((data) => {
+      if (data.token) {
+        setUserMail(mail);
+        setLoggedIn(true);
+        history.push("/");
+      } else {
+        setIsErrorTooltipOpen(true);
+      }
+    });
   }
 
   function handleLogoutSubmit(evt) {
@@ -154,6 +168,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setIsSuccessTooltipOpen(false);
+    setIsErrorTooltipOpen(false);
     setSelectedCard({ link: "", name: "" });
   }
 
@@ -208,6 +223,7 @@ function App() {
           isOpen={isSuccessTooltipOpen}
           onClose={closeAllPopups}
         />
+        <ErrorTooltip isOpen={isErrorTooltipOpen} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>
     </>
   );

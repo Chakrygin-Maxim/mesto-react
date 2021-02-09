@@ -12,9 +12,15 @@ function Login(props) {
   function handlePasswordInput(evt) {
     setPassword(evt.target.value);
   }
+
+  function handleLoginSubmit(evt) {
+    evt.preventDefault();
+    props.onSubmitButton(email, password);
+  }
+
   return (
     <Authentication
-      onSubmitButton={props.onSubmitButton}
+      onSubmitButton={handleLoginSubmit}
       title={"Вход"}
       onEmailInput={handleEmailInput}
       onPasswordInput={handlePasswordInput}
