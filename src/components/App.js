@@ -67,10 +67,19 @@ function App() {
             localStorage.removeItem("jwt");
           }
         })
-
-        .catch((error) => {
+        .catch((err) => {
           setIsErrorTooltipOpen(true);
-          console.log("Ошибка. Запрос не выполнен:", error);
+          if (err.status === 400) {
+            console.log(
+              `Код ошибки: ${err.status}, Ошибка: Токен не передан или передан не в том формате`
+            );
+          } else if (err.status === 401) {
+            console.log(
+              `Код ошибки: ${err.status}, Ошибка: Переданный токен некорректен`
+            );
+          } else {
+            console.log(`Код ошибки: ${err.status}, Ошибка: ${err.statusText}`);
+          }
         });
     }
   }
@@ -174,15 +183,33 @@ function App() {
 
   // логин сотрудника на сайте
   function handleLoginSubmit(mail, password) {
-    auth.authorize(mail, password).then((data) => {
-      if (data.token) {
-        setUserMail(mail);
-        setLoggedIn(true);
-        history.push("/");
-      } else {
+    return auth
+      .authorize(mail, password)
+      .then((res) => {
+        if (res.token) {
+          localStorage.setItem("jwt", res.token);
+          setUserMail(mail);
+          setLoggedIn(true);
+          history.push("/");
+        } else {
+          setIsErrorTooltipOpen(true);
+        }
+      })
+      .catch((err) => {
         setIsErrorTooltipOpen(true);
-      }
-    });
+        if (err.status === 400) {
+          console.log(
+            `Код ошибки: ${err.status}, Ошибка: не передано одно из полей`
+          );
+        } else if (err.status === 401) {
+          console.log(
+            `Код ошибки: ${err.status}, Ошибка: пользователь с email не найден`
+          );
+        } else {
+          console.log(`Код ошибки: ${err.status}, Ошибка: ${err.statusText}`);
+        }
+      });
+    //
   }
 
   // регистрация пользователя на сайте
@@ -197,11 +224,24 @@ function App() {
           setIsErrorTooltipOpen(true);
         }
       })
-
-      .catch((error) => {
+      .catch((err) => {
         setIsErrorTooltipOpen(true);
-        console.log("Ошибка. Запрос не выполнен:", error);
+        if (err.status === 400) {
+          console.log(
+            `Код ошибки: ${err.status}, Ошибка: не передано одно из полей`
+          );
+        } else {
+          console.log(`Код ошибки: ${err.status}, Ошибка: ${err.statusText}`);
+        }
       });
+  }
+
+  // логаут с сайта
+  function handleLogout() {
+    setLoggedIn(false);
+    setUserMail("");
+    localStorage.removeItem("jwt");
+    history.push("/sign-in");
   }
 
   // закрывает все popup
@@ -213,15 +253,6 @@ function App() {
     setIsErrorTooltipOpen(false);
     setSelectedCard({ link: "", name: "" });
   }
-
-  // логаут с сайта
-  function handleLogout() {
-    setLoggedIn(false);
-    setUserMail("");
-    localStorage.removeItem("jwt");
-    history.push("/sign-in");
-  }
-
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
