@@ -4,8 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 function Header(props) {
   const { pathname } = useLocation();
 
-  const linkText = `${pathname === "/sign-in" ? "Регистрация" : "Войти"}`;
-  const pathTo = `${pathname === "/sign-in" ? "/sign-up" : "/sign-in"}`;
+  const linkText = `${pathname === "/signin" ? "Регистрация" : "Войти"}`;
+  const pathTo = `${pathname === "/signin" ? "/signup" : "/signin"}`;
 
   return (
     <header className="header">

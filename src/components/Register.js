@@ -27,7 +27,7 @@ function Register(props) {
       btnText={"Зарегистрироваться"}
       subBtnText={"Уже зарегистрированы?"}
       linkText={"Войти"}
-      linkRoute={"/sign-in"}
+      linkRoute={"/signin"}
     />
   );
 }

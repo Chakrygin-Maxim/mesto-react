@@ -15,7 +15,6 @@ import Login from "./Login";
 import Register from "./Register";
 import SuccessTooltip from "./SuccessTooltip";
 import ErrorTooltip from "./ErrorTooltip";
-import * as auth from "../utils/auth";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
@@ -56,11 +55,12 @@ function App() {
     const jwt = localStorage.getItem("jwt");
 
     if (jwt) {
-      auth
+      api
         .checkToken(jwt)
         .then((res) => {
           if (res) {
             setUserMail(res.data.email);
+            setUserInfo(res.data);
             setLoggedIn(true);
             history.push("/");
           } else {
@@ -152,7 +152,7 @@ function App() {
 
   // установка-снятие лайка картинки
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     api
       .changeLikeCardStatus(card._id, !isLiked)
@@ -183,7 +183,7 @@ function App() {
 
   // логин сотрудника на сайте
   function handleLoginSubmit(mail, password) {
-    return auth
+    return api
       .authorize(mail, password)
       .then((res) => {
         if (res.token) {
@@ -214,11 +214,11 @@ function App() {
 
   // регистрация пользователя на сайте
   function handleRegisterSubmit(mail, password) {
-    auth
+    api
       .register(mail, password)
       .then((res) => {
         if (res.data) {
-          history.push("/sign-in");
+          history.push("/signin");
           setIsSuccessTooltipOpen(true);
         } else {
           setIsErrorTooltipOpen(true);
@@ -241,7 +241,7 @@ function App() {
     setLoggedIn(false);
     setUserMail("");
     localStorage.removeItem("jwt");
-    history.push("/sign-in");
+    history.push("/signin");
   }
 
   // закрывает все popup
@@ -275,19 +275,19 @@ function App() {
             onAddPlaceClick={handleAddPlaceClick}
             onCardClick={handleCardClick}
           />
-          <ProtectedRoute exact path="/" component={Footer} />
 
-          <Route path="/sign-up">
+          <Route path="/signup">
             <Register onSubmitButton={handleRegisterSubmit} />
           </Route>
 
-          <Route path="/sign-in">
+          <Route path="/signin">
             <Login onSubmitButton={handleLoginSubmit} />
           </Route>
           <Route>
-            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
           </Route>
         </Switch>
+        <Footer />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
